@@ -1,0 +1,1 @@
+the pixelgen iss convert the text into high quality image
