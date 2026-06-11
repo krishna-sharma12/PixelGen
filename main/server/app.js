@@ -5,6 +5,7 @@ const connectDB = require("./config/db");
 const generateImage = require("./services/imageservice");
 
 
+
 app.use(express.json());
 const cors = require("cors");
 
@@ -39,6 +40,8 @@ app.get("/",(req,res)=>{
 
 // api image prompt
 app.post("/api/image/generate", async (req, res) => {
+  console.log("REQUEST RECEIVED FROM FRONTEND");
+
   try {
     const { prompt } = req.body;
 
@@ -49,7 +52,7 @@ app.post("/api/image/generate", async (req, res) => {
       image,
     });
   } catch (error) {
-    console.log(error.message);
+    console.log(error);
 
     res.status(500).json({
       success: false,
