@@ -1,3 +1,4 @@
+const generateAccessToken = require("../utils/generateAccessToken");
 const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
@@ -20,14 +21,16 @@ const registerUser = async ({ name, email, password }) =>{
 
 
 const loginUser=async({email,password})=>{
-    const userexisting=await User.findOne({email})
-    if(!userexisting){
+    const user=await User.findOne({email}).select("+password")
+    if(!user){
         throw new Error("User does not exist");
     }
-    const isPasswordMatch=await bcrypt.compare(password,userexisting.password)
+    const isPasswordMatch=await bcrypt.compare(password,user.password)
         if(!isPasswordMatch){
             throw new Error("Invalid credentials");
         }
-            return userexisting;
+        const accessToken=generateAccessToken(user._id)
+            user.password = undefined;
+            return { user, accessToken };
 }
 module.exports={registerUser,loginUser};

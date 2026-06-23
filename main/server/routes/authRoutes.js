@@ -4,7 +4,7 @@ const {validateRegister} = require("../middleware/validateRegister.js");
 const {validateLogin} = require("../middleware/validateLogin.js");
 // const {validateLogin} = require("../middleware/validateLogin");
 const {registerUser} = require("../controllers/authController");
-const{LoginUser}=require("../controllers/authController")
+const{loginUser}=require("../controllers/authController")
 
 router.post(
    "/signup",
@@ -14,7 +14,7 @@ router.post(
 router.post(
     "/login",
     validateLogin,
-     loginUser
+   loginUser
 )
 // router.post(
 //     "/logout",

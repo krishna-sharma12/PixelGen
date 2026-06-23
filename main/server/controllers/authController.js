@@ -9,13 +9,12 @@ const registerUser=async(req,res)=>{
         res.status(500).json({message:"Error registering user", error: error.message});
     }
 }
-module.exports={registerUser};
 
 // loginUser controller
 const loginUser=async(req,res)=>{
     const{email,password}=req.body;
     try{
-        const result=await authService.LoginUser({email,password});
+        const result=await authService.loginUser({email,password});
         res.status(200).json({message:"User logged in successfully", user: result});
     } catch (error) {
         res.status(500).json({message:"Error logging in user", error: error.message});
