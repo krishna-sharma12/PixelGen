@@ -4,16 +4,26 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const generateImage = require("./services/imageservice");
 
-
-
-app.use(express.json());
 const cors = require("cors");
 
 app.use(cors());
 
 dotenv.config();
 
+//mongodb connnection
 connectDB();
+
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+
+
+app.use("/api/auth", require("./routes/authRoutes"));
+
+
+
+
+
+
 
 
 
@@ -21,22 +31,6 @@ app.get("/",(req,res)=>{
     res.send(" server is running fine ");
 })
 
-// app.get("/test", (req, res) => {
-//   res.json({
-//     success: true,
-//     message: "Backend working"
-//   });
-// });
-
-
-// app.post("/api/image/generate", (req, res) => {
-//   console.log("REQUEST RECEIVED");
-//   console.log(req.body);
-
-//   res.json({
-//     success: true
-//   });
-// });
 
 // api image prompt
 app.post("/api/image/generate", async (req, res) => {
