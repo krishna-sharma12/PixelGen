@@ -20,4 +20,22 @@ const loginUser=async(req,res)=>{
         res.status(500).json({message:"Error logging in user", error: error.message});
     }
 }
+// const getProfile = async(req,res) => {
+//     try{
+//         const result =req.user
+//         result.password=undefined
+       
+//         res.json({message:"success",user:result})
+//     }
+        
+
+//     catch(error){
+
+//         res.status(500).json({
+//           message: "Failed to fetch profile",
+//           error: error.message
+//         });
+//     }
+    
+// }
 module.exports={registerUser, loginUser};

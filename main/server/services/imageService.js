@@ -41,12 +41,24 @@ const generateImage = async (prompt, userId) => {
     throw error;
   }
 };
+
+// find all the images created by a user
+
 const getUserImagesHistory = async (userId) =>{
   const images = await Image.find({ userId });
   return images;
 }
 
+// deleteImage
+const deleteImage =async (imageid,userid)=>{
+  const result = await Image.deleteOne({ _id: imageid, userId: userid });
+  console.log(result)
+  return result;
+  
+}
+
 module.exports = {
   generateImage,
-  getUserImagesHistory
+  getUserImagesHistory,
+  deleteImage
 };

@@ -22,4 +22,20 @@ const getUserImagesHistory = async (req,res)=>{
         res.status(500).json({success:false,message:"Failed to fetch user image history"});
     }
 }
-module.exports={imageGenerator,getUserImagesHistory};
+const deleteImage = async(req,res)=>{
+    try{
+        const imageid=req.params.id;
+        const userid=req.user._id;
+        const result=await  imageService.deleteImage(imageid,userid);
+      if (result.deletedCount === 1) {
+        res.json({ success: true, message: "Image deleted successfully" });
+    // success
+      } else {
+        res.status(404).json({ success: false, message: "Image not found or doesn't belong to this user" });
+    // image not found or doesn't belong to this user
+    }
+    }catch(err){
+        res.status(500).json({success:false,message:"Failed to delete image"});
+    }
+}
+module.exports={imageGenerator,getUserImagesHistory,deleteImage};
