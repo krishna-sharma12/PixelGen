@@ -4,7 +4,7 @@ const {validateRegister} = require("../middleware/validateRegister.js");
 const {validateLogin} = require("../middleware/validateLogin.js");
 const{protect}=require("../middleware/protect.js");
 
-const {registerUser,loginUser} = require("../controllers/authController");
+const {registerUser,loginUser,getProfile} = require("../controllers/authController");
 
 router.post(
    "/signup",
@@ -23,11 +23,11 @@ router.get(
       res.json(req.user);
    }
 )
-// router.get(
-//    "/profile",
-//    protect,
-//    getProfile
-// )
+router.get(
+   "/profile",
+   protect,
+   getProfile
+)
 // router.post(
 //     "/logout",
 //     logoutUser
