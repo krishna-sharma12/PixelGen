@@ -48,7 +48,7 @@ const refreshToken = async(refreshtoken)=>{
         throw new Error("user is not found")
     }
      if(user.refreshToken!==refreshtoken){
-        throw new Error(" invalid refresh token");
+        throw new Error(" the refresh toke is invalid or expire");
         
      }
         const newRefreshToken=generateRefreshToken(user._id)
