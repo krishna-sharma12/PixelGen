@@ -4,6 +4,10 @@ const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const generateImage = require("./services/imageService");
 
+// cookie parser
+const cookieParser = require("cookie-parser");
+app.use(cookieParser());
+
 const cors = require("cors");
 
 app.use(cors());

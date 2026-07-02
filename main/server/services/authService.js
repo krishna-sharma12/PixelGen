@@ -1,4 +1,6 @@
-const generateAccessToken = require("../utils/generateAccessToken");
+const {generateAccessToken} = require("../utils/generateAccessToken")
+const {generateRefreshToken} = require("../utils/generateRefreshToken")
+const {validateRefreshToken} = require("../middleware/validateRefreshToken")
 const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
@@ -29,8 +31,34 @@ const loginUser=async({email,password})=>{
         if(!isPasswordMatch){
             throw new Error("Invalid credentials");
         }
-        const accessToken=generateAccessToken(user._id)
+        const accessToken = generateAccessToken(user._id)
+        const refreshToken = generateRefreshToken(user._id)
+        user.refreshToken = refreshToken;
+        await user.save();
             user.password = undefined;
-            return { user, accessToken };
+            return { user, accessToken,refreshToken };
 }
-module.exports={registerUser,loginUser};
+
+// validate refresh token
+const refreshToken = async(refreshtoken)=>{
+      const decoded = validateRefreshToken(refreshtoken);
+      const user = await User.findById(decoded.userId);
+     
+    if(!user){
+        throw new Error("user is not found")
+    }
+     if(user.refreshToken!==refreshtoken){
+        throw new Error(" invalid refresh token");
+        
+     }
+        const newRefreshToken=generateRefreshToken(user._id)
+        user.refreshToken=newRefreshToken;
+        await user.save()
+         const accessToken = generateAccessToken(user._id)
+        return {
+            refreshToken:newRefreshToken,
+            accessToken
+        }
+        
+}
+module.exports={registerUser,loginUser,refreshToken};

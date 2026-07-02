@@ -11,4 +11,4 @@ const generateAccessToken = (userId) => {
     })
     return token;
 }
-module.exports=generateAccessToken;
+module.exports={generateAccessToken};

@@ -4,7 +4,7 @@ const {validateRegister} = require("../middleware/validateRegister.js");
 const {validateLogin} = require("../middleware/validateLogin.js");
 const{protect}=require("../middleware/protect.js");
 
-const {registerUser,loginUser,getProfile} = require("../controllers/authController");
+const {registerUser,loginUser,getProfile,refreshToken,logoutUser} = require("../controllers/authController");
 
 router.post(
    "/signup",
@@ -28,9 +28,13 @@ router.get(
    protect,
    getProfile
 )
-// router.post(
-//     "/logout",
-//     logoutUser
+router.get(
+   "/refresh",
+   refreshToken
+)
+router.post(
+    "/logout",
+    logoutUser
 
-// )
+)
 module.exports = router;
