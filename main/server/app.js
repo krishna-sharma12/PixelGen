@@ -8,8 +8,10 @@ const generateImage = require("./services/imageService");
 const cookieParser = require("cookie-parser");
 app.use(cookieParser());
 
-const cors = require("cors");
 
+// cors 
+
+const cors = require("cors");
 app.use(cors());
 
 dotenv.config();
@@ -17,8 +19,11 @@ dotenv.config();
 //mongodb connnection
 connectDB();
 
+// parsing the data
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
+
+
 
 
 app.use("/api/auth", require("./routes/authRoutes"));
@@ -40,7 +45,8 @@ app.get("/",(req,res)=>{
 
 
 
-
+const {errorMiddleware} = require("./middleware/errorMiddleware");
+app.use(errorMiddleware);
 
 const port=5000;
 
