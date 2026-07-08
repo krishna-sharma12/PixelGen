@@ -42,17 +42,18 @@ const getProfile = asyncHandler(async(req,res) => {
 const refreshToken = asyncHandler(async(req,res)=>{
     const refreshtoken=req.cookies.refreshToken;
     
-        const result = await authService.refreshToken(refreshtoken);
-    res.status(200).json({message:"User logged in successfully", user: result});
-
-    
-  
+    const result = await authService.refreshToken(refreshtoken);
+    res.status(200).json({message:"Access token refresh successfully", user: result});
 
 })
 
 // logout user
 
 const logoutUser   = asyncHandler(async(req,res) =>{
+
+      const refreshToken = req.cookies.refreshToken;
+
+    await authService.logoutUser(refreshToken);
     res.clearCookie("refreshToken");
     res.status(200).json({message:"the user is logout successfully"})
 })

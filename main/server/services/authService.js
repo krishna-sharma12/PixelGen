@@ -4,6 +4,7 @@ const {validateRefreshToken} = require("../middleware/validateRefreshToken")
 const bcrypt = require("bcrypt");
 
 const User = require("../models/User");
+
 const registerUser = async ({ name, email, password }) =>{
 
     
@@ -59,6 +60,16 @@ const refreshToken = async(refreshtoken)=>{
             refreshToken:newRefreshToken,
             accessToken
         }
-        
+      
 }
-module.exports={registerUser,loginUser,refreshToken};
+const logoutUser= async(refreshToken) => {
+    const user = await User.findOne({refreshToken});
+    if (!user) {
+       const error = new Error("User not found");
+       error.statusCode = 404;
+       throw error;
+    }
+    user.refreshToken=null;
+    await user.save()
+}
+module.exports={registerUser,loginUser,refreshToken,logoutUser};

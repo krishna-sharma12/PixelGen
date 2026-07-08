@@ -3,7 +3,6 @@ const router=express.Router();
 const {validateRegister} = require("../middleware/validateRegister.js");
 const {validateLogin} = require("../middleware/validateLogin.js");
 const{protect}=require("../middleware/protect.js");
-
 const {registerUser,loginUser,getProfile,refreshToken,logoutUser} = require("../controllers/authController");
 
 router.post(
