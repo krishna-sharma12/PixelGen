@@ -2,8 +2,12 @@ const {generateAccessToken} = require("../utils/generateAccessToken")
 const {generateRefreshToken} = require("../utils/generateRefreshToken")
 const {validateRefreshToken} = require("../middleware/validateRefreshToken")
 const bcrypt = require("bcrypt");
+const crypto = require("crypto");
 
 const User = require("../models/User");
+
+
+// register user
 
 const registerUser = async ({ name, email, password }) =>{
 
@@ -22,11 +26,14 @@ const registerUser = async ({ name, email, password }) =>{
 
 }
 
+// login user 
 
 const loginUser=async({email,password})=>{
     const user=await User.findOne({email}).select("+password")
     if(!user){
-        throw new Error("User does not exist");
+        const error = new Error("Invalid email or password ");
+        error.statusCode = 401;
+        throw error;
     }
     const isPasswordMatch=await bcrypt.compare(password,user.password)
         if(!isPasswordMatch){
@@ -41,6 +48,7 @@ const loginUser=async({email,password})=>{
 }
 
 // validate refresh token
+
 const refreshToken = async(refreshtoken)=>{
       const decoded = validateRefreshToken(refreshtoken);
       const user = await User.findById(decoded.userId);
@@ -62,6 +70,9 @@ const refreshToken = async(refreshtoken)=>{
         }
       
 }
+
+// logout user
+
 const logoutUser= async(refreshToken) => {
     const user = await User.findOne({refreshToken});
     if (!user) {
@@ -71,5 +82,27 @@ const logoutUser= async(refreshToken) => {
     }
     user.refreshToken=null;
     await user.save()
+}
+
+// forgot password
+
+const forgotPassword = async(email) =>{
+    const user = await User.findOne({email})
+    if(!user){
+       const error = new Error("Invalid email");
+       error.statusCode = 404;
+       throw error;
+    }
+
+    const otp = crypto.randomInt(100000,1000000);
+    user.resetOtp=otp.toString();
+    user.expireResetOtp=Date.now()+ 10*60*1000;
+    await user.save();
+    await sendEmail( 
+        user.email,
+        "Password Reset OTP",
+        `Your OTP is ${otp}. It is valid for 10 minutes.`);
+        
+    
 }
 module.exports={registerUser,loginUser,refreshToken,logoutUser};

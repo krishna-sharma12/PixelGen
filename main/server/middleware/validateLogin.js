@@ -9,6 +9,7 @@ const validateLogin = (req, res, next) => {
     const result = loginSchema.validate(req.body);
 
     if (result.error) {
+        console.log(result.error)
         return res.status(400).json({
             success: false,
             message: result.error.message

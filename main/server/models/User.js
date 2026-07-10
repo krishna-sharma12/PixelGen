@@ -8,7 +8,9 @@ const UserSchema =new mongoose.Schema({
     email:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
+        lowercase: true,
+        trim: true,
     },
     password:{
         type:String,
@@ -27,7 +29,15 @@ const UserSchema =new mongoose.Schema({
     },
     refreshToken:{
         type:String,
-        required:true,
+        default:null
+    },
+    resetOtp:{
+        type:String,
+        default:null
+
+    },
+    expireResetOtp:{
+        type:String,
         default:null
     }
 },

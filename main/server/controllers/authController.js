@@ -57,4 +57,14 @@ const logoutUser   = asyncHandler(async(req,res) =>{
     res.clearCookie("refreshToken");
     res.status(200).json({message:"the user is logout successfully"})
 })
-module.exports={registerUser, loginUser,getProfile,refreshToken,logoutUser};
+
+// forgot password
+
+const forgotPassword = asyncHandler(async(req,res) => {
+    const {email} =req.body;
+     await authService.forgotPassword(email);
+    
+        res.status(200).json({success:true,message:"otp is send to the email"})
+
+})
+module.exports={registerUser, loginUser,getProfile,refreshToken,logoutUser,forgotPassword};

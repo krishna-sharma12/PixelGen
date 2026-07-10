@@ -3,7 +3,7 @@ const router=express.Router();
 const {validateRegister} = require("../middleware/validateRegister.js");
 const {validateLogin} = require("../middleware/validateLogin.js");
 const{protect}=require("../middleware/protect.js");
-const {registerUser,loginUser,getProfile,refreshToken,logoutUser} = require("../controllers/authController");
+const {registerUser,loginUser,getProfile,refreshToken,logoutUser,forgotPassword} = require("../controllers/authController");
 
 router.post(
    "/signup",
@@ -36,4 +36,9 @@ router.post(
     logoutUser
 
 )
+router.post(
+    "/forgot-password",
+     
+    forgotPassword
+);
 module.exports = router;
