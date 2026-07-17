@@ -15,6 +15,8 @@ const cors = require("cors");
 app.use(cors());
 
 dotenv.config();
+console.log("EMAIL:", process.env.EMAIL);
+console.log("EMAIL_PASSWORD:", process.env.EMAIL_PASSWORD);
 
 //mongodb connnection
 connectDB();

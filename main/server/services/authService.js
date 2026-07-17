@@ -1,5 +1,6 @@
 const {generateAccessToken} = require("../utils/generateAccessToken")
 const {generateRefreshToken} = require("../utils/generateRefreshToken")
+const {sendEmail} = require("../utils/sendEmail")
 const {validateRefreshToken} = require("../middleware/validateRefreshToken")
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
@@ -105,4 +106,4 @@ const forgotPassword = async(email) =>{
         
     
 }
-module.exports={registerUser,loginUser,refreshToken,logoutUser};
+module.exports={registerUser,loginUser,refreshToken,logoutUser,forgotPassword};
