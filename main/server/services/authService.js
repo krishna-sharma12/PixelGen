@@ -1,11 +1,13 @@
 const {generateAccessToken} = require("../utils/generateAccessToken")
 const {generateRefreshToken} = require("../utils/generateRefreshToken")
 const {sendEmail} = require("../utils/sendEmail")
+const{generateResetToken} = require("../utils/generateResetToken")
 const {validateRefreshToken} = require("../middleware/validateRefreshToken")
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 
 const User = require("../models/User");
+const { error } = require("console")
 
 
 // register user
@@ -106,4 +108,57 @@ const forgotPassword = async(email) =>{
         
     
 }
-module.exports={registerUser,loginUser,refreshToken,logoutUser,forgotPassword};
+
+
+// validateOtp
+
+const validateOtp = async(email,resetOtp) =>{
+    const user = await User.findOne({email})
+    if(!user){
+        const error = new Error("Invalid email");
+        error.statusCode = 404;
+        throw error;
+    }
+    if(user.resetOtp!=resetOtp){
+        const error = new Error("Invalid Otp");
+        error.statusCode = 404;
+        throw error;
+    }
+
+    if(user.expireResetOtp < Date.now()){
+         const error = new Error("Invalid table");
+        error.statusCode = 404;
+        throw error;
+    }
+
+
+    const resetToken = generateResetToken(user._id);
+
+    user.resetOtp=null
+    user.expireResetOtp =  null
+    await user.save()
+    return resetToken;
+
+
+
+}
+
+
+// reset password
+
+const resetPassword = async(userId,newPassword) => {
+    const user = await User.findById(userId)
+    if(!user){
+        const error = new Error("user doesn't not exist")
+        error.statusCode = 400
+        throw error
+    }
+    
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+
+
+}
+module.exports={registerUser,loginUser,refreshToken,logoutUser,forgotPassword,validateOtp,resetPassword};

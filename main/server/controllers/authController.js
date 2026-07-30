@@ -67,4 +67,32 @@ const forgotPassword = asyncHandler(async(req,res) => {
         res.status(200).json({success:true,message:"otp is send to the email"})
 
 })
-module.exports={registerUser, loginUser,getProfile,refreshToken,logoutUser,forgotPassword};
+
+const validateOtp = asyncHandler(async(req,res) =>{
+    const {email,resetOtp} = req.body;
+    const resetToken = await authService.validateOtp(email,resetOtp);
+    res.status(200).json({success:true,message:"otp is verified successfully",resetToken})
+})
+
+
+
+// resetPassword
+
+const resetPassword = asyncHandler(async (req, res) => {
+
+    const { newPassword } = req.body;
+
+    await authService.resetPassword(
+        req.user.id,
+        newPassword
+    );
+
+    res.status(200).json({
+        success: true,
+        message: "Password reset successfully"
+    });
+
+});
+
+
+module.exports={registerUser, loginUser,getProfile,refreshToken,logoutUser,forgotPassword,validateOtp,resetPassword};
